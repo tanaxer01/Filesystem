@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <fcntl.h>
 #include "kksystem.h"
 
 int main(){
@@ -12,6 +13,7 @@ int main(){
 	mKKdir( table, "hijo");
 	mKKdir( table, "nietito");
 	mKKdir( table, "renietito");
+	touchWC( table, "elnico");
 
 	printf("[+] %s %s %s %s\n", table.root->name, table.root->child->name, table.root->child->next->name, table.root->child->next->next->name);
 	rmKKdir( table, "nietito");
@@ -107,4 +109,48 @@ int rmKKdir(KK failsisten32, char* name){
 		}
 		return -1;
 	}
+}
+
+int touchWC(KK failsisten32, char* name){
+	/* Inserta un archivo en el nodo actual de la tabla, 
+	si ya existe un archivo lo coloca en la lista enlazada */
+
+	char *new_path = (char *)malloc(sizeof(char)*1024);
+	memcpy(new_path, failsisten32.curr->path, sizeof(failsisten32.curr->path));
+	strcat(new_path, "/");
+	strcat(new_path,name);
+
+	printf("Creando: %s\n", new_path);
+
+	int res = creat(new_path, 0777);
+	if(res < 0){
+		printf("No se ha podido crear el directorio. \n");
+		return -1;
+	}
+	
+	if( failsisten32.curr->child == NULL ) {
+
+		failsisten32.curr->child = (NODO *)malloc(sizeof(NODO));
+		failsisten32.curr->child->name  = name;
+		failsisten32.curr->child->type  = 1;
+		failsisten32.curr->child->path  = new_path;
+		failsisten32.curr->child->child = NULL;
+		failsisten32.curr->child->next  = NULL;
+	
+	} else {
+
+		NODO* temp = failsisten32.curr->child;
+		while( temp->next != NULL )
+			temp = temp->next;
+		
+		temp->next = (NODO *)malloc(sizeof(NODO));
+		temp->next->name   = name;
+		temp->next->path   = new_path;
+		temp->next->type   = 1;
+		temp->next->child  = NULL;
+		temp->next->next   = NULL;
+
+	}	
+
+	return 0;
 }
