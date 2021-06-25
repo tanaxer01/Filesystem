@@ -5,14 +5,6 @@
 #include <string.h>
 #include "kksystem.h"
 
-
-int kkcwd(KK failsisten32);
-
-int touchWC(KK failsisten32, char* path);
-int rmWC(KK failsisten32, char* path);
-int mvWC(KK failsisten32, char* path);
-int modWC(KK failsisten32, char* path);
-
 int main(){
 	NODO head = { .name="root", .type=1, .path=".", .child = NULL, .next = NULL };
 	KK   table = { .root=&head, .curr=&head };
