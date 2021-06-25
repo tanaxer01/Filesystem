@@ -60,6 +60,7 @@ int main(){
 		case RM:
 			printf("Running rm...\n");
 			rmWC( table, pathito);
+			break;
 		default:
 			printf("[ERROR] '%s' is not a valid command.\n", option);
 			return 1;
