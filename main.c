@@ -5,6 +5,21 @@
 #include <string.h>
 #include "kksystem.h"
 
+#define LS 5863588
+#define CD 5863276
+#define MKDIR 210720772860
+#define RMDIR 210726774339
+#define PWD 193502992
+
+const unsigned long hash(const char *str) {
+    unsigned long hash = 5381;  
+    int c;
+
+    while ((c = *str++))
+        hash = ((hash << 5) + hash) + c;
+	//printf("Hash: %lu\n", hash);
+    return hash;
+}
 
 int kkcwd(KK failsisten32);
 
@@ -17,6 +32,41 @@ int main(){
 	NODO head = { .name="root", .type=1, .path=".", .child = NULL, .next = NULL };
 	KK   table = { .root=&head, .curr=&head };
 
+	char *option = (char*)malloc(10);
+	char *pathito = (char*)malloc(10);
+	printf("Bienvenidos al failsisten32: \n");
+	
+	while(1){
+
+		printf(">> ");
+		scanf("%s", option);
+		scanf("%s", pathito);
+
+		switch(hash(option)) {
+		case MKDIR:
+			printf("Running mkdir...\n");
+			mKKdir( table, pathito);
+			break;
+		case RMDIR:
+			printf("Running rmdir...\n");
+			rmKKdir( table, pathito);
+			break;
+		default:
+			printf("[ERROR] '%s' is not a valid command.\n", option);
+			return 1;
+		}
+
+	}
+	/*
+	if (strcmp(option, "mkdir") == 0) {
+		printf("hola\n");
+	} else if (strcmp(option, "rmdir") == 0) {
+		printf("chao\n");
+	} else {
+		printf("xdd\n");
+	}*/
+
+	/*
 	mKKdir( table, "hijo");
 	mKKdir( table, "nietito");
 	mKKdir( table, "renietito");
@@ -26,7 +76,7 @@ int main(){
 	printf("[+] %s %s %s \n", table.root->name, table.root->child->name, table.root->child->next->name );
 	rmKKdir( table, "hijo");
 	printf("[+] %s %s \n", table.root->name, table.root->child->name );
-
+	*/
 }
 
 
@@ -100,8 +150,10 @@ int rmKKdir(KK failsisten32, char* name){
 		int res = rmdir( failsisten32.curr->child->path );
 
 		printf("Removiendo: %s\n", failsisten32.curr->child->path );
-		if(res < 0)
+		if(res < 0){
+			printf("No se ha podido borrar el archivo.\n");
 			return -1;
+		}
 		// Manejar archivos
 
 		NODO* temp = failsisten32.curr->child;
