@@ -6,7 +6,6 @@
 #include <fcntl.h>
 #include "kksystem.h"
 
-<<<<<<< HEAD
 #define LS 5863588
 #define CD 5863276
 #define MKDIR 210720772860
@@ -30,8 +29,6 @@ int rmWC(KK failsisten32, char* path);
 int mvWC(KK failsisten32, char* path);
 int modWC(KK failsisten32, char* path);
 
-=======
->>>>>>> 0c939cdaf4025f78af45b1fe14cc1a2006f19be8
 int main(){
 	NODO head = { .name="root", .type=1, .path=".", .child = NULL, .next = NULL };
 	KK   table = { .root=&head, .curr=&head };
@@ -143,7 +140,9 @@ int rmKKdir(KK failsisten32, char* name){
 	} else if( failsisten32.curr->child->name == name){
 		// es el primer dir
 		int res = rmdir( failsisten32.curr->child->path );
-		if(res < 0) return -1;
+		if(res < 0){
+		  printf("No se pudo borrar el directorio\n");
+		  return -1;
 
 		// Manejar archivos
 		NODO* temp = failsisten32.curr->child->next;
@@ -156,7 +155,7 @@ int rmKKdir(KK failsisten32, char* name){
 
 		printf("Removiendo: %s\n", failsisten32.curr->child->path );
 		if(res < 0){
-			printf("No se ha podido borrar el archivo.\n");
+			printf("No se ha podido borrar el directorio.\n");
 			return -1;
 		}
 		// Manejar archivos
