@@ -226,17 +226,17 @@ int touchWC(KK failsisten32, char* name){
 }
 
 int rmWC(KK failsisten32, char* name){
-	/*	Remueve un directorio en el nodo actual de la tabla, 
+	/* Remueve un archivo en el nodo actual de la tabla, 
 	si no se encuentra el archivo recibimos -1 */	
 
 	if( failsisten32.curr->child == NULL ){
-		// no hay dirs
+		// no hay nodos
 		printf("No existe el directorio. \n");
 		return -1;
 
 	} else if( failsisten32.curr->child->name == name && failsisten32.curr->child->type == 0 ){
-		// es el primer dir
-		int res = rmdir( failsisten32.curr->child->path );
+		// es el primer nodo
+		int res = unlink( failsisten32.curr->child->path );
 		if(res < 0){
 		  printf("No se pudo borrar el directorio\n");
 		  return -1;
@@ -248,7 +248,7 @@ int rmWC(KK failsisten32, char* name){
 		failsisten32.curr->child = temp;
 	}else{
 		// es otro dir
-		int res = rmdir( failsisten32.curr->child->path );
+		int res = unlink( failsisten32.curr->child->path );
 
 		printf("Removiendo: %s\n", failsisten32.curr->child->path );
 		if(res < 0){
