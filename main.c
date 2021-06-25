@@ -10,7 +10,8 @@
 #define CD 5863276
 #define MKDIR 210720772860
 #define RMDIR 210726774339
-#define PWD 193502992
+#define TOUCH 210729236360
+#define RM 5863780
 
 const unsigned long hash(const char *str) {
     unsigned long hash = 5381;  
@@ -18,7 +19,7 @@ const unsigned long hash(const char *str) {
 
     while ((c = *str++))
         hash = ((hash << 5) + hash) + c;
-	//printf("Hash: %lu\n", hash);
+	printf("Hash: %lu\n", hash);
     return hash;
 }
 
@@ -52,6 +53,13 @@ int main(){
 			printf("Running rmdir...\n");
 			rmKKdir( table, pathito);
 			break;
+		case TOUCH:
+			printf("Running touch...\n");
+			touchWC( table, pathito);
+			break;
+		case RM:
+			printf("Running rm...\n");
+			rmWC( table, pathito);
 		default:
 			printf("[ERROR] '%s' is not a valid command.\n", option);
 			return 1;
