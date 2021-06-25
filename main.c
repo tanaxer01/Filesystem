@@ -12,6 +12,7 @@
 #define RMDIR 210726774339
 #define TOUCH 210729236360
 #define RM 5863780
+#define EXIT 6385204799
 
 const unsigned long hash(const char *str) {
     unsigned long hash = 5381;  
@@ -29,6 +30,9 @@ int touchWC(KK failsisten32, char* path);
 int rmWC(KK failsisten32, char* path);
 int mvWC(KK failsisten32, char* path);
 int modWC(KK failsisten32, char* path);
+NODO* validatePath(KK failsisten32, char* path);
+int mover(KK failsisten32, char*path, char* file);
+
 
 int main(){
 	NODO head = { .name="root", .type=1, .path=".", .child = NULL, .next = NULL };
@@ -42,13 +46,16 @@ int main(){
 
 		printf(">> ");
 		scanf("%s", option);
-		scanf("%s", pathito);
 
+		if (hash(option) == LS) {
+		  listEnv(table);
+		  continue;
+		} else if (hash(option) == EXIT) {
+		  return 1;
+		}
+		scanf("%s", pathito);
+		
 		switch(hash(option)) {
-		case LS:
-			printf("Running ls...\n");
-			listEnv(table);
-			break;
 		case CD:
 			printf("Running cd...\n");
 			changeDirectory(&table, pathito);
@@ -71,6 +78,7 @@ int main(){
 			break;
 		default:
 			printf("[ERROR] '%s' is not a valid command.\n", option);
+			mover( table, pathito, "aaa" );
 			return 1;
 		}
 
@@ -293,6 +301,10 @@ void listEnv(KK failsisten32) {
 }
 
 void changeDirectory(KK *failsisten32, char* path) {
+  if( strcmp(path,"..") == 0){
+    failsisten32->curr = failsisten32->root;
+    return;
+  }
 	char delim[] = "/";
 
 	char *ptr = strtok(path, delim);
@@ -324,4 +336,31 @@ void changeDirectory(KK *failsisten32, char* path) {
 		}
 	}
 
+}
+
+int mover( KK failsisten32, char* path, char* file){
+  // encontrar puntero a file
+  NODO* archivo = failsisten32.curr->child;
+  NODO mover;
+  if( archivo->name != file ){
+    while( archivo->next != NULL ){
+      if( archivo->name == file ){
+	mover = *archivo;
+        rmWC( failsisten32, file );
+	break;
+      }
+    }
+  }
+  
+  changeDirectory(&failsisten32, path);
+  if( failsisten32.curr->child == NULL ){
+    failsisten32.curr->child = (NODO *)malloc(sizeof(NODO));
+    failsisten32.curr->child->name = mover.name;
+    failsisten32.curr->child->path;
+    failsisten32.curr->child->next = NULL;
+    failsisten32.curr->child->child = NULL;
+  }
+  // agrega archivo
+
+  return 1;
 }
