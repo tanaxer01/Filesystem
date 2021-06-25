@@ -21,10 +21,10 @@ int kkcwd(KK failsisten32);
 
 //Ready
 int mKKdir(KK failsisten32, char* name);
-int rmKKdir(KK failsisten32, char* path);
+int rmKKdir(KK failsisten32, char* name);
+int touchWC(KK failsisten32, char* name);
 
 //Falta
-int touchWC(KK failsisten32, char* path);
 int rmWC(KK failsisten32, char* path);
 int mvWC(KK failsisten32, char* path);
 int modWC(KK failsisten32, char* path);
