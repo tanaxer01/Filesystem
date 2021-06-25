@@ -22,9 +22,9 @@ const unsigned long hash(const char *str) {
 	printf("Hash: %lu\n", hash);
     return hash;
 }
-
+void listEnv(KK failsisten32);
 int kkcwd(KK failsisten32);
-
+void changeDirectory(KK *failsisten32, char* name);
 int touchWC(KK failsisten32, char* path);
 int rmWC(KK failsisten32, char* path);
 int mvWC(KK failsisten32, char* path);
@@ -45,6 +45,14 @@ int main(){
 		scanf("%s", pathito);
 
 		switch(hash(option)) {
+		case LS:
+			printf("Running ls...\n");
+			listEnv(table);
+			break;
+		case CD:
+			printf("Running cd...\n");
+			changeDirectory(&table, pathito);
+			break;
 		case MKDIR:
 			printf("Running mkdir...\n");
 			mKKdir( table, pathito);
@@ -268,6 +276,52 @@ int rmWC(KK failsisten32, char* name){
 			}
 		}
 		return -1;
+	}
+
+}
+
+void listEnv(KK failsisten32) {
+
+	printf("Estas en el path: %s\n", failsisten32.curr->path);
+	NODO* temp = failsisten32.curr->child;
+	
+	while (temp != NULL ) {
+		printf("%s ", temp->path);
+		temp = temp->next;
+	}
+	printf("\n");
+}
+
+void changeDirectory(KK *failsisten32, char* path) {
+	char delim[] = "/";
+
+	char *ptr = strtok(path, delim);
+
+	char *new_path = (char *)malloc(sizeof(char)*1024);
+	memcpy(new_path, failsisten32->curr->path, sizeof(failsisten32->curr->path));
+	
+	NODO *temp = failsisten32->curr->child;
+
+	strcat(new_path, "/");
+	strcat(new_path, ptr);
+		
+	while( temp != NULL ){
+		if (strcmp(temp->path, new_path) == 0) {
+			failsisten32->curr = temp;
+			printf("Tu path actual es %s, comparado con %s\n", failsisten32->curr->path, new_path);
+
+			ptr = strtok(NULL, delim);
+			if (ptr != NULL) {
+				strcat(new_path, "/");
+				strcat(new_path, ptr);
+				temp = failsisten32->curr->child;
+			} else {
+				return;
+			}
+
+		} else {
+			temp = temp->next;
+		}
 	}
 
 }
