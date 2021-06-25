@@ -61,8 +61,10 @@ int mKKdir(KK failsisten32, char* name){
 
 
 	int res = mkdir(new_path, 0777);
-	if(res < 0)
+	if(res < 0){
+		printf("No se ha podido crear el directorio. \n");
 		return -1;
+	}
 	
 	if( failsisten32.curr->child == NULL ) {
 
@@ -98,6 +100,7 @@ int rmKKdir(KK failsisten32, char* name){
 
 	if( failsisten32.curr->child == NULL ){
 		// no hay dirs
+		printf("No existe el directorio. \n");
 		return -1;
 
 	} else if( failsisten32.curr->child->name == name){
