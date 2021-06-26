@@ -21,7 +21,6 @@ const unsigned long hash(const char *str) {
 
   while ((c = *str++))
     hash = ((hash << 5) + hash) + c;
-  printf("Hash: %lu\n", hash);
   return hash;
 }
 void listEnv(KK failsisten32);
@@ -29,8 +28,7 @@ int kkcwd(KK failsisten32);
 void changeDirectory(KK *failsisten32, char* name);
 int touchWC(KK failsisten32, char* path);
 int rmWC(KK failsisten32, char* path);
-int movwc(kk failsisten32, char* old, char* new);
-int modWC(KK failsisten32, char* name);
+int movWC(KK failsisten32, char* old, char* new);
 NODO* validatePath(KK failsisten32, char* path);
 int mover(KK failsisten32, char*path, char* file);
 
@@ -80,9 +78,9 @@ int main(){
       rmWC( table, pathito);
       break;
     case MV:
-      printf("Running rm...\n");
+      printf("Running mv...\n");
       scanf("%s", pathitonew);
-      movwc( table, pathito, pathitonew);
+      movWC( table, pathito, pathitonew);
       break;
     default:
       printf("[ERROR] '%s' is not a valid command.\n", option);
@@ -279,18 +277,24 @@ int rmWC(KK failsisten32, char* name){
 
 int movWC(KK failsisten32, char* old, char* new){
   /* Modifica el nombre de un archivo en el nodo actual de 
-     la tabla, si no se encuentra el archivo recibimos -1 */	
+     la tabla, si no se encuentra el archivo recibimos -1 */
+  printf("%s %s\n", old, new);
 
+  printf("uno\n");
   if( failsisten32.curr->child == NULL ){
     // no hay nodos
     printf("No existe el archivo. \n");
     return -1;
 
-  } else if( failsisten32.curr->child->name == old && failsisten32.curr->child->type == 0 ){
+  } else if( failsisten32.curr->child->name == old && failsisten32.curr->child->type == 1 ){
     // es el primer nodo
     char *new_path = (char *)malloc(sizeof(failsisten32.curr->path)+sizeof(new));
     memcpy(new_path, failsisten32.curr->path, sizeof( failsisten32.curr->path));
+    strcat(new_path, "/");
     strcat(new_path, new);
+
+    printf("PRIMERO\n");
+
     int res = rename( failsisten32.curr->child->path, new_path );
     if(res < 0){
       printf("No se pudo renombrar el archivo\n");
@@ -303,22 +307,27 @@ int movWC(KK failsisten32, char* old, char* new){
     failsisten32.curr->child->path = new_path;
 
   }else{
-    // es otro dir
-    char *new_path = (char *)malloc(sizeof(failsisten32.curr->path)+sizeof(new));
-    memcpy(new_path, failsisten32.curr->path, sizeof( failsisten32.curr->path));
-    strcat(new_path, new);
-    int res = rename( failsisten32.curr->child->path, new_path );
 
+    // es otro dir
+    char *new_path = (char *)malloc(sizeof(failsisten32.curr->path)+sizeof(new)+sizeof(char));
+    memcpy(new_path, failsisten32.curr->path, sizeof( failsisten32.curr->path));
+    strcat(new_path, "/");
+    strcat(new_path, new);
+
+    printf("SEGUNDO\n");
+    int res = rename( failsisten32.curr->child->path, new_path );
     printf("Renombrando: %s\n", failsisten32.curr->child->path );
     if(res < 0){
       printf("No se ha podido renombrar el archivo.\n");
       return -1;
     }
     // Manejar archivos
-
+    
     NODO* temp = failsisten32.curr->child;
     while(temp->next != NULL){
-      if( temp->next->name == old && temp->child->type == 0){
+
+      if( temp->next->name == old && temp->child->type == 1){
+	printf("SEGUNDODODO %s \n", old);
 	temp->next->name = new;
 	temp->next->path = new_path;
 	return 0;
