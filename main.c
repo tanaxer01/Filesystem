@@ -29,7 +29,7 @@ int kkcwd(KK failsisten32);
 void changeDirectory(KK *failsisten32, char* name);
 int touchWC(KK failsisten32, char* path);
 int rmWC(KK failsisten32, char* path);
-int mvWC(KK failsisten32, char* path);
+int movwc(kk failsisten32, char* old, char* new);
 int modWC(KK failsisten32, char* name);
 NODO* validatePath(KK failsisten32, char* path);
 int mover(KK failsisten32, char*path, char* file);
@@ -41,6 +41,8 @@ int main(){
 
   char *option = (char*)malloc(10);
   char *pathito = (char*)malloc(10);
+  char *pathitonew = (char*)malloc(10);
+
   printf("Bienvenidos al failsisten32: \n");
 	
   while(1){
@@ -76,6 +78,11 @@ int main(){
     case RM:
       printf("Running rm...\n");
       rmWC( table, pathito);
+      break;
+    case MV:
+      printf("Running rm...\n");
+      scanf("%s", pathitonew);
+      movwc( table, pathito, pathitonew);
       break;
     default:
       printf("[ERROR] '%s' is not a valid command.\n", option);
